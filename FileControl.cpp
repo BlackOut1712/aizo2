@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include "Graf.h"
+#include "Graf.cpp"
 
 using namespace std;
 
@@ -10,9 +10,9 @@ class FileControl{
     char readBuffer[50];
     
     public:
-    FileControl();
+    FileControl(){};
 
-    void readFile(const string filename){
+    void readFile(const string filename, Graf& graf){
         /* This function reads data from a file and processes it */
         
         fstream file;
@@ -23,10 +23,13 @@ class FileControl{
         }
 
         file.getline(readBuffer, sizeof(readBuffer), '\t');
-        int nodeNumber = stoi(readBuffer);
+        int edgeNumber = stoi(readBuffer);
 
         file.getline(readBuffer, sizeof(readBuffer), '\n');
-        int edgeNumber = stoi(readBuffer);
+        int nodeNumber = stoi(readBuffer);
+
+        cout << "Node Number: " << nodeNumber << ", Edge Number: " << edgeNumber << endl;
+        graf.initiate(nodeNumber, edgeNumber);
 
         int SourceNode, DestinationNode, Weight;
 
@@ -40,8 +43,9 @@ class FileControl{
             file.getline(readBuffer, sizeof(readBuffer), '\n');
             Weight = stoi(readBuffer);
 
+            cout << "Source: " << SourceNode << ", Destination: " << DestinationNode << ", Weight: " << Weight << endl;
             //Create the edge
-            //Graf::addEdge(SourceNode, DestinationNode, Weight);
+            graf.addEdge(SourceNode, DestinationNode, Weight);
             //Rownolegle dodawac do macierzy i listy nastepnikow???
         }
 
