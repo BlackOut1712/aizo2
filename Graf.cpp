@@ -56,6 +56,42 @@ class Graf{
         this->i++;
     }
 
+    void generateGraf(int nodeNumber, double density) {
+        if(this->incidenceMatrix != nullptr) {
+            std::cout << "Graph is already initialized. Please reset it before generating a new graph." << std::endl;
+            return;
+        }
+
+        if (nodeNumber <= 0 || density <= 0 || density > 1) {
+            std::cout << "Invalid parameters for generating graph." << std::endl;
+            return;
+        }
+        int maxEdges = nodeNumber * (nodeNumber - 1) / (this->isDirected ? 1 : 2);
+
+        int edgesToCreate = (int) (maxEdges * density);
+        initiate(nodeNumber, edgesToCreate);
+        std::cout << maxEdges << std::endl;
+        std::cout << edgesToCreate << std::endl;
+        std::cout << this->edgeNumber << " " << this->nodeNumber;
+        for (int j = 0; i < edgesToCreate; ++j) {
+            int source;
+            if(j < nodeNumber){
+                // Ensure that the graph is connected.
+                source = j;
+            }
+            else{
+                source = rand() % nodeNumber;
+            }
+            int destination = rand() % nodeNumber;
+            while (destination == source) {
+                destination = rand() % nodeNumber; // Ensure source and destination are different
+            }
+            //std::cout << "Creating edge from " << source << " to " << destination << std::endl;
+            int weight = rand() % 100 + 1; // Random weight between 1 and 100
+            addEdge(source, destination, weight);
+        }
+    }
+
     int getEdgeNumber() const {
         return this->edgeNumber;
     }    

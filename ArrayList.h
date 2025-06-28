@@ -13,8 +13,12 @@ class ArrayList{
         T& get(int index) const;
         int getSize() const;
         int isEmpty() const { return size == 0; }
-        void remove(int index);
+        void unite(ArrayList<T>& other);
+        void set(int index, const T& element);
         ArrayList<T>& operator=(const ArrayList<T>& other);
+        bool operator==(const ArrayList<T>& other);
+
+        void remove(int index);
 
     private:
         T* data; // Pointer to the array of elements

@@ -14,7 +14,6 @@ ArrayList<T>::ArrayList(const ArrayList<T>& other) : size(other.size), capacity(
     }
 }
 
-
 template <typename T>
 ArrayList<T>::~ArrayList() {
     delete[] data;
@@ -66,6 +65,22 @@ ArrayList<T>& ArrayList<T>::operator=(const ArrayList<T>& other) {
 }
 
 template <typename T>
+bool ArrayList<T>::operator==(const ArrayList<T>& other){
+    if(size != other.size){
+        return false;
+    }
+
+    for(int i=0; i<size; i++){
+        if(!other.contains(data[i])){
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+template <typename T>
 void ArrayList<T>::remove(int index) {
     if (index < 0 || index >= size) {
         std::cout << "Index out of bounds." << std::endl;
@@ -88,3 +103,19 @@ void ArrayList<T>::resize() {
     data = newData;
 }
 
+template <typename T>
+void ArrayList<T>::set(int index, const T& element) {
+    if (index < 0 || index >= size) {
+        throw std::out_of_range("Index out of bounds");
+    }
+    data[index] = element;
+}
+
+template <typename T>
+void ArrayList<T>::unite(ArrayList<T>& other){
+    for (int i = 0; i < other.size; ++i) {
+        if (!contains(other.data[i])) {
+            add(other.data[i]);
+        }
+    }
+}

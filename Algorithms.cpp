@@ -3,6 +3,7 @@
 #include "Successor.h"
 #include "ArrayList.h"
 #include "PriorityQueue.h"
+#include "Unionn.h"
 
 using namespace std;
 
@@ -17,12 +18,44 @@ class Algorithms{
 
         //static void DijkstraAlgorithmList(int** successorsList, int nodeNumber, int edgeNumber) {}
 
-        //static void DijkstraAlgorithmMatrix(int** incidenceMatrix, int nodeNumber, int edgeNumber) {}
+        static void DijkstraAlgorithmMatrix(int** incidenceMatrix, int nodeNumber, int edgeNumber) {}
 
         //static void KruskalAlgorithmList(int** successorsList, int nodeNumber, int edgeNumber) {}
 
-        //static void KruskalAlgorithmMatrix(int** incidenceMatrix, int nodeNumber, int edgeNumber) {}
+        /*
+        static ArrayList<Edge> KruskalAlgorithmMatrix(int** incidenceMatrix, int nodeNumber, int edgeNumber) {
+            ArrayList<Edge> MST; // Minimum Spanning Tree
+            PriorityQueue<Edge> queue; // Priority queue to hold edges
 
+            // Add all edges to the priority queue
+            for(int i = 0; i < edgeNumber; i++){
+                for(int j = 0; j < nodeNumber; j++){
+                    if(incidenceMatrix[j][i] != 0){ // Check if the edge exists
+                        Edge edge(j, i, abs(incidenceMatrix[j][i]));
+                        queue.add(edge); // Add the edge to the priority queue
+                    }
+                }
+            }    
+            
+            ArrayList<ArrayList<Unionn>> unions; // List of unions
+            for(int i = 0; i < nodeNumber; i++){
+                ArrayList<Unionn> unionX; // Create a new union for each node
+                Unionn newUnion(i); // Create a new union with the node number
+                unionX.add(newUnion); // Add the new union to the list of unions
+                unions.add(unionX); // Add the union to the list of unions
+            }
+            
+            while(MST.getSize() < nodeNumber - 1 && !queue.isEmpty()) {
+                Edge edge = queue.extractMIN(); // Get the minimum edge from the queue
+                int source = edge.getSource(); // Get the source of the edge
+                int destination = edge.getDestination(); // Get the destination of the edge
+
+                
+            }
+
+        
+        }
+        */
         static ArrayList<Edge> PrimsAlgorithmList(ArrayList<ArrayList<Successor>> successorsList) {
             int Node = 0; // Starting node for Prim's algorithm
             ArrayList<int> visitedNodes; // List of visited nodes

@@ -21,7 +21,7 @@ int Timer::stop() {
 
 int Timer::result() {
     // This function calculates the elapsed time and returns it
-    this->elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(this->end_time - this->start_time).count();
+    this->elapsed_time = std::chrono::duration_cast<std::chrono::microseconds>(this->end_time - this->start_time).count();
     return this->elapsed_time;
 }
 

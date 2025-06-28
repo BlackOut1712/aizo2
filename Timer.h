@@ -10,12 +10,14 @@ public:
     void reset(); // Reset timer.
     int start(); // Start timer.
     int stop(); // Stop timer.
-    int result(); // Return elapsed time [ms].
+    int result(); // Return elapsed time [us].
 
 private:
     std::chrono::high_resolution_clock::time_point start_time;
     std::chrono::high_resolution_clock::time_point end_time;
-    int elapsed_time; // Elapsed time in milliseconds
+    int elapsed_time; // Elapsed time in microseconds
 };
+
+#include "Timer.cpp"
 
 #endif
