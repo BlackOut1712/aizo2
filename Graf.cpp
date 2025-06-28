@@ -1,12 +1,15 @@
 #include <iostream>
+#include "Successor.h"
+#include "ArrayList.h"
 class Graf{
     public:
-    Graf() : edgeNumber(0), nodeNumber(0), incidenceMatrix(nullptr), successorsList(nullptr), predecessorsList(nullptr) {}
+    Graf() : edgeNumber(0), incidenceMatrix(nullptr), nodeNumber(0) {}
     ~Graf() {
         for (int i = 0; i < this->nodeNumber; ++i) {
             delete[] this->incidenceMatrix[i];
         }
         delete[] this->incidenceMatrix;
+
     }
 
     void addEdge(int source, int destination, int weight) {
@@ -14,24 +17,48 @@ class Graf{
             std::cout << "Invalid edge or incidence matrix not initialized." << std::endl;
             return;
         }
-
         if(this->i >= this->edgeNumber) {
             std::cout << "Edge index exceeds the number of edges." << std::endl;
             return;
         }
 
+        // For directed graphs
         if(this->isDirected){
-            // For directed graphs
+            //For matrix
             this->incidenceMatrix[source][this->i] = (-1)*weight;
-            this->incidenceMatrix[destination][this->i] = weight;
+            this->incidenceMatrix[destination][this->i] = weight; 
+            
+            // For successors list
+            Successor successor(destination, weight);
+            if(!this->successorsList.get(source).contains(successor)){
+                this->successorsList.get(source).add(successor);
+            }
         }
+
+        // For undirected graphs
         else{
-            // For undirected graphs
             this->incidenceMatrix[source][this->i] = weight;
             this->incidenceMatrix[destination][this->i] = weight;
+            
+            // For successors list
+            Successor successor(destination, weight);
+            Successor successorReverse(source, weight);
+
+            if(!this->successorsList.get(source).contains(successor)){
+                this->successorsList.get(source).add(successor);
+            }
+            if(!this->successorsList.get(destination).contains(successorReverse)){
+                this->successorsList.get(destination).add(successorReverse);
+            }
         }
+
+
         this->i++;
     }
+
+    int getEdgeNumber() const {
+        return this->edgeNumber;
+    }    
 
     int** getIncidenceMatrix() {
         if (this->incidenceMatrix == nullptr) {
@@ -41,10 +68,19 @@ class Graf{
         return this->incidenceMatrix;
     }
 
+    int getNodeNumber() const {
+        return this->nodeNumber;
+    }
+
+    ArrayList<ArrayList<Successor>> getSuccessorsList() {
+        return this->successorsList;
+    }
+
     void initiate(int nodeNumber, int edgeNumber) {
         setNodeNumber(nodeNumber);
         setEdgeNumber(edgeNumber);
         createIncidenceMatrix();
+        createSuccessorsList();
     }
 
     void printIncidenceMatrix() {
@@ -62,14 +98,17 @@ class Graf{
         }
     }
 
+    void setDirected(bool isDirected) {
+        this->isDirected = isDirected;
+    }
+
     private:
     int edgeNumber; // Number of edges
     int i=0; // Edge index for adding edges
     int** incidenceMatrix; // Incidence matrix
     bool isDirected = true; // Default to directed graph 
     int nodeNumber; // Number of nodes
-    int** predecessorsList; // List of predecessors
-    int** successorsList; // List of successors
+    ArrayList<ArrayList<Successor>> successorsList; // List of successors
 
 
     void createIncidenceMatrix() {
@@ -82,22 +121,15 @@ class Graf{
         }
     }
 
-    void createPredecessorsList() {
-        if(!isDirected) {
-            this->predecessorsList = this->successorsList;
-            return;
-        }       
-
-        //blablabla
-    }
-
     void createSuccessorsList() {
-        if(successorsList = nullptr){
+        if(!successorsList.isEmpty()){
             std::cout << "Successors list is already created." << std::endl;
             return;
         }
-        this->successorsList = new int*[this->nodeNumber];
-
+        for(int i=0; i < this->nodeNumber; i++) {
+            ArrayList<Successor> successors;
+            this->successorsList.add(successors);
+        }
     }
 
     void setEdgeNumber(int edgeNumber) {
