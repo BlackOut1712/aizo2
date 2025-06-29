@@ -57,40 +57,49 @@ class Graf{
     }
 
     void generateGraf(int nodeNumber, double density) {
-        if(this->incidenceMatrix != nullptr) {
-            std::cout << "Graph is already initialized. Please reset it before generating a new graph." << std::endl;
-            return;
-        }
-
-        if (nodeNumber <= 0 || density <= 0 || density > 1) {
-            std::cout << "Invalid parameters for generating graph." << std::endl;
-            return;
-        }
-        int maxEdges = nodeNumber * (nodeNumber - 1) / (this->isDirected ? 1 : 2);
-
-        int edgesToCreate = (int) (maxEdges * density);
-        initiate(nodeNumber, edgesToCreate);
-        std::cout << maxEdges << std::endl;
-        std::cout << edgesToCreate << std::endl;
-        std::cout << this->edgeNumber << " " << this->nodeNumber;
-        for (int j = 0; i < edgesToCreate; ++j) {
-            int source;
-            if(j < nodeNumber){
-                // Ensure that the graph is connected.
-                source = j;
-            }
-            else{
-                source = rand() % nodeNumber;
-            }
-            int destination = rand() % nodeNumber;
-            while (destination == source) {
-                destination = rand() % nodeNumber; // Ensure source and destination are different
-            }
-            //std::cout << "Creating edge from " << source << " to " << destination << std::endl;
-            int weight = rand() % 100 + 1; // Random weight between 1 and 100
-            addEdge(source, destination, weight);
-        }
+    if(this->incidenceMatrix != nullptr) {
+        std::cout << "Graph is already initialized. Please reset it before generating a new graph." << std::endl;
+        return;
     }
+
+    if (nodeNumber <= 0 || density <= 0 || density > 1) {
+        std::cout << "Invalid parameters for generating graph." << std::endl;
+        return;
+    }
+
+    int maxEdges = isDirected 
+        ? nodeNumber * (nodeNumber - 1)
+        : nodeNumber * (nodeNumber - 1) / 2;
+
+    int edgesToCreate = (int)(maxEdges * density);
+    if (edgesToCreate < nodeNumber - 1) edgesToCreate = nodeNumber - 1; // At least a spanning tree
+
+    initiate(nodeNumber, edgesToCreate);
+
+    for (int i = 0; i < nodeNumber - 1; ++i) {
+        int source = i;
+        int destination = i + 1;
+        int weight = rand() % 100 + 1;
+        addEdge(source, destination, weight);
+    }
+
+    int edgesAdded = nodeNumber - 1;
+
+
+    while (edgesAdded < edgesToCreate) {
+        int source = rand() % nodeNumber;
+        int destination = rand() % nodeNumber;
+        if (source == destination) continue;
+
+        // Avoid duplicate edges
+        Successor successor(destination, 1);
+        if (this->successorsList.get(source).contains(successor)) continue;
+
+        int weight = rand() % 500 + 1;
+        addEdge(source, destination, weight);
+        edgesAdded++;
+    }
+}
 
     int getEdgeNumber() const {
         return this->edgeNumber;

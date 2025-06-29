@@ -11,8 +11,10 @@ class PriorityQueue {
 
         void add(T element);
         T extractMIN();
+        int getIndex(T element);
         bool isEmpty() const { return size == 0; }
         void print() const;
+        void update(int index, T element);
 
     private:
         T* data; // Pointer to the array of elements

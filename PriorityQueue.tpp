@@ -52,6 +52,19 @@ T PriorityQueue<T>::extractMIN() {
 }
 
 template <typename T>
+int PriorityQueue<T>::getIndex(T element){
+    /*  This function finds and returns the index of given element.
+    *   If given element is not within the data, it returns -1. 
+    */
+    for(int i=0; i<size; i++){
+        if(data[i]==element){
+            return i;
+        }
+    }
+    return -1;
+}
+
+template <typename T>
 void PriorityQueue<T>::heapify(int index) {
     /* This function ensures that the heap property is maintained by moving the element at index down the heap
      * until it is in the correct position. It's used when removing the root element from the heap.
@@ -151,4 +164,13 @@ void PriorityQueue<T>::resize() {
     delete[] this->data;
     this->data = newData;
     this->capacity *= 2;
+}
+
+template <typename T>
+void PriorityQueue<T>::update(int index, T element){
+    /* This function updates the element with given index
+    and ensure that the heap property are maintained
+    */
+    data[index] = element;
+    heapify(0);
 }

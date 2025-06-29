@@ -12,6 +12,18 @@ class FileControl{
     public:
     FileControl(){};
 
+    void raport(const string filename, int NodesNumber, double density, int time){
+        fstream file;
+        file.open(filename, ios::out | ios::app);
+        if(!file){
+            std::cout<<"Report file not found." << std::endl;
+            return;
+        }
+
+        file << NodesNumber << ";" << density << ";" << time << "\n";
+        file.close();
+    }
+
     void readFile(const string filename, Graf& graf){
         /* This function reads data from a file and processes it */
         
@@ -28,7 +40,7 @@ class FileControl{
         file.getline(readBuffer, sizeof(readBuffer), '\n');
         int nodeNumber = stoi(readBuffer);
 
-        cout << "Node Number: " << nodeNumber << ", Edge Number: " << edgeNumber << endl;
+        //cout << "Node Number: " << nodeNumber << ", Edge Number: " << edgeNumber << endl;
         graf.initiate(nodeNumber, edgeNumber);
 
         int SourceNode, DestinationNode, Weight;
@@ -43,7 +55,7 @@ class FileControl{
             file.getline(readBuffer, sizeof(readBuffer), '\n');
             Weight = stoi(readBuffer);
 
-            cout << "Source: " << SourceNode << ", Destination: " << DestinationNode << ", Weight: " << Weight << endl;
+            //cout << "Source: " << SourceNode << ", Destination: " << DestinationNode << ", Weight: " << Weight << endl;
             //Create the edge
             graf.addEdge(SourceNode, DestinationNode, Weight);
             //Rownolegle dodawac do macierzy i listy nastepnikow???

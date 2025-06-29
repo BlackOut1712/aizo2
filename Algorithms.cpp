@@ -4,6 +4,7 @@
 #include "ArrayList.h"
 #include "PriorityQueue.h"
 #include "Unionn.h"
+#include "PathNode.h"
 
 using namespace std;
 
@@ -18,7 +19,104 @@ class Algorithms{
 
         //static void DijkstraAlgorithmList(int** successorsList, int nodeNumber, int edgeNumber) {}
 
-        static void DijkstraAlgorithmMatrix(int** incidenceMatrix, int nodeNumber, int edgeNumber) {}
+        static ArrayList<Edge> DijkstraAlgorithmMatrix(int** incidenceMatrix, int nodeNumber, int edgeNumber, int startNode, int endNode) {
+
+            //Edge List - lista krawedzi
+            ArrayList<Edge> EdgeList;
+
+            //S -  zbiór zawierający poprzednikow i wagi najkrótszych ścieżek ze źródła do wierzchołków 
+            ArrayList<PathNode> S;
+
+            //Q - kolejka priorytetowa pathNodes (klucz - ścieżka)
+            PriorityQueue<PathNode> queue;
+
+
+            //Initialize-Single-Source
+            for(int i=0; i<nodeNumber; i++){
+                PathNode Node(i);
+                if(i==startNode){
+                    Node.setPathValue(0);
+                    Node.setPredecessor(i);
+                }
+                queue.add(Node);
+                S.add(Node);
+            }
+
+            while(!queue.isEmpty()){
+                PathNode u = queue.extractMIN();
+                S.set(u.getNode(), u);
+                ArrayList<Edge> edges;
+
+                //Looking for all edges leaving this node.
+                for(int i=0; i<edgeNumber; i++){
+                    if(incidenceMatrix[u.getNode()][i]<0){
+                        for(int j=0; j<nodeNumber; j++){
+                            if(incidenceMatrix[j][i]>0){
+                                Edge edge(u.getNode(), j, incidenceMatrix[j][i]);
+                                //std::cout << "Edge from " << u.getNode() << " to " << j << " with weight " << incidenceMatrix[j][i] << std::endl;
+                                edges.add(edge);
+                            }
+                        }
+                    }
+                }
+
+                //add to EdgeList
+                for(int i=0; i<edges.getSize(); i++){
+                    EdgeList.add(edges.get(i));
+                }
+
+                //std::cout<<"Usuwam wierzcholek " << u.getNode() << std::endl;
+
+                //Relax
+                for(int i=0; i<edges.getSize(); i++){
+                    //if new path is smaller than an old path
+                    int newPath = S.get(u.getNode()).getPathValue()+edges.get(i).getWeight();
+                    //std::cout << S.get(u.getNode()).getPathValue()  << " + " << edges.get(i).getWeight() << " = " << newPath << std::endl;
+                    int oldPath =  S.get(edges.get(i).getDestination()).getPathValue();
+                    if(newPath < oldPath){
+                        //std::cout << "Wierzcholek " << edges.get(i).getDestination() << " poprzednik: " << u.getNode();
+                        PathNode updatedNode(edges.get(i).getDestination(), u.getNode(), newPath);
+                        S.set(edges.get(i).getDestination(), updatedNode);
+                        int index = queue.getIndex(updatedNode);
+                        if(index>=0){
+                            queue.update(index, updatedNode);
+
+                        }
+                    }
+                }
+            }
+
+            //Scieżka jako Lista Krawędzi:
+            ArrayList<Edge> Path;
+            int i = endNode;
+            while(S.get(i).getNode()!=startNode){
+                PriorityQueue<Edge> possibilities; //In case there are multiple edges from the same source to the same destination
+                int current = S.get(i).getNode();
+                int previous = S.get(i).getPredecessor();
+                for(int j=0; j<EdgeList.getSize(); j++){
+                    if(EdgeList.get(j).getSource() == previous && EdgeList.get(j).getDestination() == current){
+                        possibilities.add(EdgeList.get(j));                        
+                    }
+                }
+                
+                if(!possibilities.isEmpty()){
+                    Path.add(possibilities.extractMIN());
+                }
+
+                i = previous;
+            }
+
+            //Reverse
+            int PathSize = Path.getSize();
+            for(int j=0; j<PathSize/2; j++){
+                Edge temp = Path.get(j);
+                Path.set(j, Path.get(PathSize-1-j));
+                Path.set(PathSize-1-j, temp);
+            }
+                        
+            return Path;
+
+        }
 
         //static void KruskalAlgorithmList(int** successorsList, int nodeNumber, int edgeNumber) {}
 
@@ -139,25 +237,27 @@ class Algorithms{
             return MST;
         }
 
-    private:
-        int startNode = -1; // Initialize startNode to -1 to indicate it hasn't been set yet
-        int endNode = -1; // Initialize endNode to -1 to indicate it hasn't been set yet
-
-        void askForStartingNode(int nodeNumber) {
+        static int askForStartingNode(int nodeNumber) {
             cout<< "Insert a starting node (0 to " << nodeNumber - 1 << "): ";
+            int startNode;
             try{
-            cin >> this->startNode;
+            cin >> startNode;
             }catch (const std::exception& e) {
                 cout << "Invalid input." << endl;
+                return -1;
             }
+            return startNode;
         }
 
-        void askForEndNode(int nodeNumber) {
+        static int askForEndNode(int nodeNumber) {
             cout<< "Insert a end node (0 to " << nodeNumber - 1 << "): ";
+            int endNode;
             try{
-            cin >> this->endNode;
+            cin >> endNode;
             }catch (const std::exception& e) {
                 cout << "Invalid input." << endl;
+                return -1;
             }
+            return endNode;
         }
 };
