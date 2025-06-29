@@ -21,6 +21,7 @@ ArrayList<T>::~ArrayList() {
 
 template <typename T>
 void ArrayList<T>::add(const T& element) {
+    //This function add given element to the list
     if (size == capacity) {
         resize();
     }
@@ -29,6 +30,7 @@ void ArrayList<T>::add(const T& element) {
 
 template <typename T>
 bool ArrayList<T>::contains(const T& element) const {
+    //This function check if list contains given element. If so, returns true.
     for (int i = 0; i < size; ++i) {
         if (data[i] == element) {
             return true;
@@ -39,6 +41,7 @@ bool ArrayList<T>::contains(const T& element) const {
 
 template <typename T>
 T& ArrayList<T>::get(int index) const {
+    //This function returns the element on given index
     if (index < 0 || index >= size) {
         throw std::out_of_range("Index out of bounds");
     }
@@ -47,6 +50,7 @@ T& ArrayList<T>::get(int index) const {
 
 template <typename T>
 int ArrayList<T>::getSize() const {
+    //This function returns the size of the list
     return size;
 }
 
@@ -82,6 +86,7 @@ bool ArrayList<T>::operator==(const ArrayList<T>& other){
 
 template <typename T>
 void ArrayList<T>::remove(int index) {
+    //This function removes element on given index from the list, and fixes the list after.
     if (index < 0 || index >= size) {
         std::cout << "Index out of bounds." << std::endl;
         return;
@@ -94,6 +99,7 @@ void ArrayList<T>::remove(int index) {
 
 template <typename T>
 void ArrayList<T>::resize() {
+    //This function resize the allocated memory for data
     capacity *= 2; // Double the capacity
     T* newData = new T[capacity];
     for (int i = 0; i < size; ++i) {
@@ -105,6 +111,7 @@ void ArrayList<T>::resize() {
 
 template <typename T>
 void ArrayList<T>::set(int index, const T& element) {
+    //This function set the elemnent on the given index to the given value
     if (index < 0 || index >= size) {
         throw std::out_of_range("Index out of bounds");
     }
@@ -113,6 +120,7 @@ void ArrayList<T>::set(int index, const T& element) {
 
 template <typename T>
 void ArrayList<T>::unite(ArrayList<T>& other){
+    //This function adds given list to the this list without duplicates
     for (int i = 0; i < other.size; ++i) {
         if (!contains(other.data[i])) {
             add(other.data[i]);

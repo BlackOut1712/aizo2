@@ -13,6 +13,15 @@ class Algorithms{
         ~Algorithms(){}
 
         static ArrayList<Edge> DijkstraAlgorithmList(ArrayList<ArrayList<Successor>> successorsList, int startNode, int endNode) {
+            /* This function performs a Dijkstra Algorithm using graph represented by successors list.
+            *   Parameters:
+            *   successorsList -  list of successors
+            *   startNode - Node to start
+            *   endNode - Node to end
+            *   returns:
+            *   Shortest path between these nodes
+            */
+
             //Edge List - lista krawedzi
             ArrayList<Edge> EdgeList;
 
@@ -46,20 +55,6 @@ class Algorithms{
                     edges.add(edge);
                 }
                 
-                
-                /*
-                for(int i=0; i<edgeNumber; i++){
-                    if(incidenceMatrix[u.getNode()][i]<0){
-                        for(int j=0; j<nodeNumber; j++){
-                            if(incidenceMatrix[j][i]>0){
-                                Edge edge(u.getNode(), j, incidenceMatrix[j][i]);
-                                //std::cout << "Edge from " << u.getNode() << " to " << j << " with weight " << incidenceMatrix[j][i] << std::endl;
-                                edges.add(edge);
-                            }
-                        }
-                    }
-                }
-                */
 
                 //add to EdgeList
                 for(int i=0; i<edges.getSize(); i++){
@@ -120,6 +115,17 @@ class Algorithms{
         }
 
         static ArrayList<Edge> DijkstraAlgorithmMatrix(int** incidenceMatrix, int nodeNumber, int edgeNumber, int startNode, int endNode) {
+            /* This function performs a Dijkstra Algorithm using graph represented by incidence Matrix.
+            *   Parameters:
+            *   incidenceMatrix - as in name
+            *   nodeNumber - total number of nodes in this graph
+            *   edgeNumber - total number of edges in this graph
+            *   startNode - Node to start
+            *   endNode - Node to end
+            *   returns:
+            *   Shortest path between these nodes
+            */
+
             //Edge List - lista krawedzi
             ArrayList<Edge> EdgeList;
 
@@ -217,43 +223,13 @@ class Algorithms{
 
         }
 
-        //static void KruskalAlgorithmList(int** successorsList, int nodeNumber, int edgeNumber) {}
-
-        /*
-        static ArrayList<Edge> KruskalAlgorithmMatrix(int** incidenceMatrix, int nodeNumber, int edgeNumber) {
-            ArrayList<Edge> MST; // Minimum Spanning Tree
-            PriorityQueue<Edge> queue; // Priority queue to hold edges
-
-            // Add all edges to the priority queue
-            for(int i = 0; i < edgeNumber; i++){
-                for(int j = 0; j < nodeNumber; j++){
-                    if(incidenceMatrix[j][i] != 0){ // Check if the edge exists
-                        Edge edge(j, i, abs(incidenceMatrix[j][i]));
-                        queue.add(edge); // Add the edge to the priority queue
-                    }
-                }
-            }    
-            
-            ArrayList<ArrayList<Unionn>> unions; // List of unions
-            for(int i = 0; i < nodeNumber; i++){
-                ArrayList<Unionn> unionX; // Create a new union for each node
-                Unionn newUnion(i); // Create a new union with the node number
-                unionX.add(newUnion); // Add the new union to the list of unions
-                unions.add(unionX); // Add the union to the list of unions
-            }
-            
-            while(MST.getSize() < nodeNumber - 1 && !queue.isEmpty()) {
-                Edge edge = queue.extractMIN(); // Get the minimum edge from the queue
-                int source = edge.getSource(); // Get the source of the edge
-                int destination = edge.getDestination(); // Get the destination of the edge
-
-                
-            }
-
-        
-        }
-        */
         static ArrayList<Edge> PrimsAlgorithmList(ArrayList<ArrayList<Successor>> successorsList) {
+            /*  This function performs Prim's Algorithm on graph represented as list of successors.
+            *   Parameters:
+            *   successorsList - as in name
+            *   returns:
+            *   MST represented as list of edges
+            */
             int Node = 0; // Starting node for Prim's algorithm
             ArrayList<int> visitedNodes; // List of visited nodes
             ArrayList<Edge> MST;
@@ -292,7 +268,14 @@ class Algorithms{
         }
 
         static ArrayList<Edge> PrimsAlgorithmMatrix(int** incidenceMatrix, int nodeNumber, int edgeNumber) {
-            
+            /*  This function performs Prim's Algorithm on graph represented as incidence matrix.
+            *   Parameters:
+            *   incidenceMatrix - as in name
+            *   nodeNumber - total number of nodes in graph
+            *   edgeNumber - total number of edges in graph
+            *   returns:
+            *   MST represented as list of edges
+            */
             int Node = 0; // Starting node for Prim's algorithm
             ArrayList<int> visitedNodes; // List of visited nodes
             ArrayList<Edge> MST;
@@ -337,6 +320,8 @@ class Algorithms{
         }
 
         static int askForStartingNode(int nodeNumber) {
+            /*  This function ask an user to provide the starting node for shortest path problem
+            */
             cout<< "Insert a starting node (0 to " << nodeNumber - 1 << "): ";
             int startNode;
             try{
@@ -349,6 +334,8 @@ class Algorithms{
         }
 
         static int askForEndNode(int nodeNumber) {
+            /*  This function ask an user to provide the starting node for shortest path problem
+            */
             cout<< "Insert a end node (0 to " << nodeNumber - 1 << "): ";
             int endNode;
             try{

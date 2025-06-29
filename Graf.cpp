@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Successor.h"
 #include "ArrayList.h"
-#include "Edge.h"
+#include "Edge.cpp"
 class Graf{
     public:
     Graf() : edgeNumber(0), incidenceMatrix(nullptr), nodeNumber(0) {}
@@ -14,6 +14,8 @@ class Graf{
     }
 
     void addEdge(int source, int destination, int weight) {
+        //This function adds an edge to the graph by editing both of the representations.
+
         if(source < 0 || source >= this->nodeNumber || destination < 0 || destination >= this->nodeNumber || this->incidenceMatrix == nullptr) {
             std::cout << "Invalid edge or incidence matrix not initialized." << std::endl;
             return;
@@ -58,6 +60,7 @@ class Graf{
     }
 
     int countTotalCost(ArrayList<Edge> solution){
+        //This function counts the total cost of the solution to MST or shortest path problems
         int totalWeight=0;
         for(int i=0; i<solution.getSize(); i++){
             totalWeight+= solution.get(i).getWeight();
@@ -66,49 +69,50 @@ class Graf{
     }
 
     void generateGraf(int nodeNumber, double density) {
-    if(this->incidenceMatrix != nullptr) {
-        std::cout << "Graph is already initialized. Please reset it before generating a new graph." << std::endl;
-        return;
+        //This function generates random graph with given number of nodes and density. Created graph has weights and is connected.
+        if(this->incidenceMatrix != nullptr) {
+            std::cout << "Graph is already initialized. Please reset it before generating a new graph." << std::endl;
+            return;
+        }
+
+        if (nodeNumber <= 0 || density <= 0 || density > 1) {
+            std::cout << "Invalid parameters for generating graph." << std::endl;
+            return;
+        }
+
+        int maxEdges = isDirected 
+            ? nodeNumber * (nodeNumber - 1)
+            : nodeNumber * (nodeNumber - 1) / 2;
+
+        int edgesToCreate = (int)(maxEdges * density);
+        if (edgesToCreate < nodeNumber - 1) edgesToCreate = nodeNumber - 1; // At least a spanning tree
+
+        initiate(nodeNumber, edgesToCreate);
+
+        for (int i = 0; i < nodeNumber - 1; ++i) {
+            int source = i;
+            int destination = i + 1;
+            int weight = rand() % 100 + 1;
+            addEdge(source, destination, weight);
+        }
+
+        int edgesAdded = nodeNumber - 1;
+
+
+        while (edgesAdded < edgesToCreate) {
+            int source = rand() % nodeNumber;
+            int destination = rand() % nodeNumber;
+            if (source == destination) continue;
+
+            // Avoid duplicate edges
+            Successor successor(destination, 1);
+            if (this->successorsList.get(source).contains(successor)) continue;
+
+            int weight = rand() % 500 + 1;
+            addEdge(source, destination, weight);
+            edgesAdded++;
+        }
     }
-
-    if (nodeNumber <= 0 || density <= 0 || density > 1) {
-        std::cout << "Invalid parameters for generating graph." << std::endl;
-        return;
-    }
-
-    int maxEdges = isDirected 
-        ? nodeNumber * (nodeNumber - 1)
-        : nodeNumber * (nodeNumber - 1) / 2;
-
-    int edgesToCreate = (int)(maxEdges * density);
-    if (edgesToCreate < nodeNumber - 1) edgesToCreate = nodeNumber - 1; // At least a spanning tree
-
-    initiate(nodeNumber, edgesToCreate);
-
-    for (int i = 0; i < nodeNumber - 1; ++i) {
-        int source = i;
-        int destination = i + 1;
-        int weight = rand() % 100 + 1;
-        addEdge(source, destination, weight);
-    }
-
-    int edgesAdded = nodeNumber - 1;
-
-
-    while (edgesAdded < edgesToCreate) {
-        int source = rand() % nodeNumber;
-        int destination = rand() % nodeNumber;
-        if (source == destination) continue;
-
-        // Avoid duplicate edges
-        Successor successor(destination, 1);
-        if (this->successorsList.get(source).contains(successor)) continue;
-
-        int weight = rand() % 500 + 1;
-        addEdge(source, destination, weight);
-        edgesAdded++;
-    }
-}
 
     int getEdgeNumber() const {
         return this->edgeNumber;
@@ -131,6 +135,7 @@ class Graf{
     }
 
     void initiate(int nodeNumber, int edgeNumber) {
+        //This function creates both of the graph's representation
         setNodeNumber(nodeNumber);
         setEdgeNumber(edgeNumber);
         createIncidenceMatrix();
@@ -138,6 +143,7 @@ class Graf{
     }
 
     void printIncidenceMatrix() {
+        //This function prints the incidence matrix
         if (this->incidenceMatrix == nullptr) {
         std::cout << "Incidence matrix is not initialized." << std::endl;
         return;
@@ -166,6 +172,7 @@ class Graf{
 
 
     void createIncidenceMatrix() {
+        //This function create matrix filled with 0's
         this->incidenceMatrix = new int*[this->nodeNumber];
         for (int i = 0; i < this->nodeNumber; ++i) {
             this->incidenceMatrix[i] = new int[this->edgeNumber];
@@ -176,6 +183,7 @@ class Graf{
     }
 
     void createSuccessorsList() {
+        //This function creates List of lists for successors list
         if(!successorsList.isEmpty()){
             std::cout << "Successors list is already created." << std::endl;
             return;

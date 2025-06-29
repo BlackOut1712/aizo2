@@ -15,6 +15,7 @@ class FileControl{
     FileControl(){};
 
     void raport(const string filename, int NodesNumber, double density, int time){
+        //This function writes the report to the file with filename given. It is used while testing the project
         fstream file;
         file.open(filename, ios::out | ios::app);
         if(!file){
@@ -68,6 +69,7 @@ class FileControl{
     }
 
     void writeFile(const string filename, ArrayList<Edge> solution, int TotalCost){
+        //This function types the solution to the file with given filename.
         fstream file;
         file.open(filename, ios::out);
         if(!file){
