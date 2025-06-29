@@ -67,7 +67,6 @@ void PathNode::operator=(const PathNode& other){
     predecessor = predecessor;
 }
 
-/*
 bool PathNode::operator==(const PathNode& other){
     return pathValue==other.pathValue;
 }

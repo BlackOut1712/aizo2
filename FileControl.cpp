@@ -2,6 +2,8 @@
 #include <string>
 #include <fstream>
 #include "Graf.cpp"
+#include "ArrayList.h"
+#include "Edge.h"
 
 using namespace std;
 
@@ -56,9 +58,27 @@ class FileControl{
             Weight = stoi(readBuffer);
 
             //cout << "Source: " << SourceNode << ", Destination: " << DestinationNode << ", Weight: " << Weight << endl;
+
             //Create the edge
             graf.addEdge(SourceNode, DestinationNode, Weight);
             //Rownolegle dodawac do macierzy i listy nastepnikow???
+        }
+
+        file.close();
+    }
+
+    void writeFile(const string filename, ArrayList<Edge> solution, int TotalCost){
+        fstream file;
+        file.open(filename, ios::out);
+        if(!file){
+            std::cout<<"Report file not found." << std::endl;
+            return;
+        }
+
+        file << "Total Cost: " << TotalCost << "\n";
+
+        for(int i=0; i<solution.getSize();  i++){
+            file << solution.get(i).getSource() << "\t" << solution.get(i).getDestination() << "\t" << solution.get(i).getWeight() << "\n";
         }
 
         file.close();

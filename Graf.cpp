@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Successor.h"
 #include "ArrayList.h"
+#include "Edge.h"
 class Graf{
     public:
     Graf() : edgeNumber(0), incidenceMatrix(nullptr), nodeNumber(0) {}
@@ -54,6 +55,14 @@ class Graf{
 
 
         this->i++;
+    }
+
+    int countTotalCost(ArrayList<Edge> solution){
+        int totalWeight=0;
+        for(int i=0; i<solution.getSize(); i++){
+            totalWeight+= solution.get(i).getWeight();
+        }
+        return totalWeight;
     }
 
     void generateGraf(int nodeNumber, double density) {

@@ -1,45 +1,37 @@
 #include <iostream>
+#include "Edge.h"
 
-class Edge {
+    Edge::Edge() : source(-1), destination(-1), weight(0) {} // Default constructor
+    Edge::Edge(int source, int destination, int weight) : source(source), destination(destination), weight(weight) {}
 
-public:
-    Edge() : source(-1), destination(-1), weight(0) {} // Default constructor
-    Edge(int source, int destination, int weight) : source(source), destination(destination), weight(weight) {}
-
-    int getSource() const {
+    int Edge::getSource() const {
         return source;
     }
 
-    int getDestination() const {
+    int Edge::getDestination() const {
         return destination;
     }
 
-    int getWeight() const {
+    int Edge::getWeight() const {
         return weight;
     }
 
-    bool operator==(const Edge& other) const {
+    bool Edge::operator==(const Edge& other) const {
         return this->weight == other.weight;
     }
 
-    bool operator<(const Edge& other) const {
+    bool Edge::operator<(const Edge& other) const {
         return this->weight < other.weight;
     }
 
-    bool operator>(const Edge& other) const {
+    bool Edge::operator>(const Edge& other) const {
         return this->weight > other.weight;
     }
 
-    bool operator<=(const Edge& other) const {
+    bool Edge::operator<=(const Edge& other) const {
         return this->weight <= other.weight;
     }
 
-    bool operator>=(const Edge& other) const {
+    bool Edge::operator>=(const Edge& other) const {
         return this->weight >= other.weight;
     }    
-
-private:
-    int source;       // Source vertex of the edge
-    int destination;  // Destination vertex of the edge
-    int weight;       // Weight of the edge
-};

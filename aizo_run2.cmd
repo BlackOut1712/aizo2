@@ -25,8 +25,14 @@ for /L %%d in (0,1,2) do (
     
     echo === Density: !currentDensity! Size: %size% ===
     
-    for /L %%i in (1,1,50) do (
-        %program% --test %problem% %algorithm% %size% !currentDensity!
+    for /L %%i in (1,1,5) do (
+        set /a param1=!random! %% %size%
+        set /a param2=!random! %% %size%
+
+        (
+            echo !param1!
+            echo !param2!
+        ) | %program% --test %problem% %algorithm% %size% !currentDensity!
     )
 )
 
